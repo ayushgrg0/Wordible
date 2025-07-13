@@ -6,16 +6,16 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Home</a>
+                <a class="nav-link {% if home_page %} active {% endif %}" href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="word_counter.html">Word Counter</a>
+                <a class="nav-link {% if word_counter_page %} active {% endif %}" href="{% url 'word_counter' %}">Word Counter</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="wfcounter.html">Frequency Counter</a>
+                <a class="nav-link {% if frequency_counter_page %} active {% endif %}" href="{% url 'wfcounter' %}">Frequency Counter</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
+                <a class="nav-link {% if about_page %} active {% endif %}" href="{% url 'about' %}">About</a>
             </li>
         </ul>
     </div>

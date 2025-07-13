@@ -18,16 +18,20 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="message" class="form-label">Enter your text be counted:</label>
-                <textarea class="form-control" name="message" rows="5" placeholder="Enter your text here"></textarea>
+                <textarea class="form-control" name="message" rows="5" placeholder="Enter your text here">{{ message }}</textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
 
-            <h5 style="margin-top: 50px ; color:rgba(18, 47, 231, 0.836)">Word Count Summary:</h5>
-
-            <textarea class="form-control" rows="5" readonly style="background-color: #f8f9fa;">
+            <!-- <textarea class="form-control" rows="5" readonly style="background-color: #f8f9fa;">
                     {{message}} : {{words_count}}
-            </textarea>
+            </textarea> -->
         </form>
+        {% if words_count %}
+        <div class="mt-5">
+            <h5 class="text-primary">Word Count Summary:</h5>
+            <p class="form-control bg-light">Total_words: {{ words_count }}</p>
+        </div>
+        {% endif %}
     </div>
 </body>
 

@@ -10,10 +10,14 @@
 </head>
 
 <body>
+
     {% include "nav.html" %}
-    <h1> This is the main home or Landing page for my website</h1>
 
-
-</body>
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+        <h1 class="mb-4 fw-bold">Welcome to Wordible</h1>
+        <a href= "{% url 'word_counter' %}" class="btn btn-primary m-2">Word Counter</a>
+        <a href= "{% url 'wfcounter' %}" class="btn btn-secondary m-2">Word Frequency Counter</a>
+    </div>
+</body> 
 
 </html>
