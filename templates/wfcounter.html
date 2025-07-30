@@ -1,48 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <title>{{page_title}} | Wordible</title>
+    <title>{{ page_title|default:"Word Frequency Counter" }} | Wordible</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
-<body>
+<body class="bg-light">
     {% include "nav.html" %}
-    <div class="container mt-5">
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="message" class="form-label" style="margin-top: 30px;">Enter the text to count word
-                    frequency:</label>
-                <textarea class="form-control mx-auto" name="message" rows="7"
-                    placeholder="Enter your text here">{{ message }}</textarea>
-                <button type="submit" class="btn btn-success" style="margin-top: 25px ;">Analyze</button>
-                <!-- <h5 style="margin-top: 50px ; color:rgba(14, 39, 205, 0.836)">Word Count Summary:</h5>
-                <textarea class="form-control" rows="5" readonly style="background-color: #f8f9fa;">
-                {% for word, count in words_counted.items %}
-                    {{ word }}: {{ count }}
-                {% endfor %}
-                </textarea> -->
-            </div>
-        </form>
-        {% if words_counted %}
-        <div class="mt-5">
-            <h5 style="color: rgba(14, 39, 205, 0.836);">Word Frequency Result:</h5>
-            <ul class="list-group">
-                {% for word, count in words_counted.items %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ word }}
-                    <span class="badge bg-primary rounded-pill">{{ count }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-    </div>
-</body>
-</body>
 
+    <main class="container my-5">
+        <section class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-dark mb-3">Word Frequency Counter</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 600px;">Analyze word frequency in your text to uncover usage patterns, perfect for SEO, research, and content creation.</p>
+        </section>
+
+        <section class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-dark mb-3">Enter Your Text</h3>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Enter text to count word frequency:</label>
+                                <textarea class="form-control" name="message" id="textInput" rows="8" placeholder="Paste or type your text here">{{ message|default:"" }}</textarea>
+                            </div>
+                            <div class="d-flex justify-content-between flex-wrap gap-2">
+                                <button type="submit" class="btn btn-primary">Analyze</button>
+                                <button type="button" class="btn btn-outline-secondary" id="clearText">Clear Text</button>
+                                <a href="{% url 'word_counter' %}" class="btn btn-outline-primary">Try Word Counter</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {% if words_counted %}
+                <div class="card border-0 shadow-lg rounded-3">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-dark mb-3">Word Frequency Results</h3>
+                        <ul class="list-group" id="frequencyList">
+                            {% for word, count in words_counted.items %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ word }}
+                                <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="mt-3 text-center">
+                            <button class="btn btn-primary" id="copyResults">Copy Results</button>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card border-0 shadow-lg rounded-3">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-dark mb-3">Word Frequency Results</h3>
+                        <p class="text-muted text-center">Enter text above to see word frequency results.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">&copy; 2025 Wordible. All rights reserved.</p>
+    </footer>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: #0d6efd;
+            border-color: #0d6efd;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-secondary {
+            color: #6c757d;
+            border-color: #6c757d;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px !important;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+        }
+
+        .card-text, .text-muted {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        footer {
+            background-color: #1c2526 !important;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script>
+        const textInput = document.getElementById('textInput');
+        const frequencyList = document.getElementById('frequencyList');
+        const clearTextBtn = document.getElementById('clearText');
+        const copyResultsBtn = document.getElementById('copyResults');
+
+        textInput.addEventListener('input', updateFrequency);
+        clearTextBtn.addEventListener('click', clearText);
+        if (copyResultsBtn) {
+            copyResultsBtn.addEventListener('click', copyResults);
+        }
+
+        function updateFrequency() {
+            const text = textInput.value.trim();
+            if (!text && frequencyList) {
+                frequencyList.innerHTML = '<li class="list-group-item text-center text-muted">No words to display</li>';
+                return;
+            }
+
+            const words = text.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+            const frequency = {};
+            words.forEach(word => {
+                frequency[word] = (frequency[word] || 0) + 1;
+            });
+
+            if (frequencyList) {
+                frequencyList.innerHTML = '';
+                Object.entries(frequency).sort((a, b) => b[1] - a[1]).forEach(([word, count]) => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `${word}<span class="badge bg-primary rounded-pill">${count}</span>`;
+                    frequencyList.appendChild(li);
+                });
+            }
+        }
+
+        function clearText() {
+            textInput.value = '';
+            updateFrequency();
+        }
+
+        function copyResults() {
+            const results = Array.from(frequencyList.querySelectorAll('li')).map(li => {
+                const word = li.childNodes[0].textContent;
+                const count = li.querySelector('.badge').textContent;
+                return `${word}: ${count}`;
+            }).join('\n');
+            navigator.clipboard.writeText(results).then(() => {
+                alert('Results copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy results.');
+            });
+        }
+
+        window.addEventListener('load', updateFrequency);
+    </script>
+</body>
 </html>
