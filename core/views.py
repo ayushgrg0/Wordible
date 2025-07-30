@@ -53,20 +53,3 @@ class WordFrequencyCounter(View):
             "frequency_counter_page": True,
         }
         return render(request, "wfcounter.html", context)
-
-
-class About(View):
-
-    def get(self, request):
-        context = {
-            "page_title": "About",
-            "about_page": True,
-        }
-        return render(request, "about.html", context)
-
-    def post(self, request):
-        context = {
-            "page_title": "About",
-            "about_page": True,
-        }
-        return render(request, "about.html", context)
